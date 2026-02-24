@@ -1,6 +1,14 @@
-
 let todos = [];
 let selectedTodoIndex;
+
+// Load todos from LocalStorage when page loads
+window.onload = function() {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+        todos = JSON.parse(savedTodos);
+        displayTodo();
+    }
+}
 
 function submitTodo() {
     let task = document.getElementById("task").value;
@@ -14,12 +22,15 @@ function submitTodo() {
 
     let todo = { task, date, comments };
 
-    if (selectedTodoIndex == undefined || selectedTodoIndex == null ) {
+    if (selectedTodoIndex == undefined || selectedTodoIndex == null) {
         todos.push(todo);
     } else {
         todos[selectedTodoIndex] = todo;
         selectedTodoIndex = null;
     }
+
+    // Save to LocalStorage
+    localStorage.setItem("todos", JSON.stringify(todos));
 
     displayTodo();
 
@@ -68,5 +79,6 @@ function editTodo(index) {
 
 function deleteTodo(index) {
     todos.splice(index, 1);
+    localStorage.setItem("todos", JSON.stringify(todos)); // Update storage
     displayTodo();
 }
